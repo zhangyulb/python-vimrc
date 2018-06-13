@@ -1,34 +1,37 @@
-=============
-PYTHON .VIMRC
-=============
+==============================
+MY VIM CONFIG FOR PYTHON AND C
+==============================
 
 VIM Configuration for Python / Cython / C Development.
 
-Keep calm and use VIM!
+This repo borrows tons of stuff from ets-labs/python-vimrc. Thanks for sharing!
 
 Requirements
 ------------
 
-- VIM 7.4
+- VIM 7.4+ with python2.7 support
 - git
 - bash 3.2+
 
 How does it look?
 -----------------
 
-.. image:: https://github.com/ets-labs/python-vimrc/wiki/img/screenshot.png
+.. image:: https://github.com/zhangyulbpython-vimrc/wiki/img/screenshot.png
 
 Installation
 ------------
 
-You can install it by using CLI just have next command executed:
-
 .. code-block:: bash
-
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ets-labs/python-vimrc/master/setup.sh)"
-
+  mv ~/.vim ~/.vim-old && mv ~/.vimrc ~/.vimrc-old
+  git clone https://github.com/zhangyulb/python-vimrc.git
+  cd python-vimrc && sh setup.sh
+  
 During execution of init script do not worry about error messages. When it
 occurs just press enter and wait till all plugins are installed.
+
+After that, install ctags support:
+.. code-block:: bash
+   apt-get install exuberant-ctags
 
 Autocompletion
 --------------
@@ -41,13 +44,12 @@ instructions could be found on plugin page:
 `Valloric/YouCompleteMe <https://github.com/Valloric/YouCompleteMe#installation>`_.
 
 
-**Note:** Installation for Mac OS with support of clang compiler looks like 
+**Note:** Installation for Ubuntu with support of clang compiler looks like 
 this:
 
 .. code-block:: bash
 
   ~/.vim/bundle/YouCompleteMe/install.py --clang-completer
-
 
 Key bindings
 ============
