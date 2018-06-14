@@ -30,6 +30,7 @@ During execution of init script do not worry about error messages. When it
 occurs just press enter and wait till all plugins are installed. After that, install ctags support:
 
 .. code-block:: bash
+
   apt-get install exuberant-ctags
  
 
