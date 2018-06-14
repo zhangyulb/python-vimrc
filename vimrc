@@ -36,6 +36,7 @@ call vundle#begin()
     Plugin 'rosenfeld/conque-term'              " Consoles as buffers
     Plugin 'tpope/vim-surround'                 " Parentheses, brackets, quotes, XML tags, and more
     Plugin 'flazz/vim-colorschemes'             " Colorschemes
+    Plugin 'jlanzarotta/bufexplorer'            " Buffer explorer
 
     "-------------------=== Snippets support ===--------------------
     Plugin 'garbas/vim-snipmate'                " Snippets manager
@@ -61,10 +62,13 @@ filetype plugin indent on
 "=====================================================
 "" General settings
 "=====================================================
+set autoread                                " auto read files if changed outside
+
 syntax enable                               " syntax highlight
 
 set t_Co=256                                " set 256 colors
 colorscheme wombat256mod                    " set color scheme
+set background=dark
 
 set number                                  " show line numbers
 set ruler
@@ -94,9 +98,17 @@ set clipboard=unnamed                       " use system clipboard
 set exrc                                    " enable usage of additional .vimrc files from working directory
 set secure                                  " prohibit .vimrc files to execute shell, create files, etc...
 
-" Additional mappings for Esc (useful for MacBook with touch bar)
-inoremap jj <Esc>
-inoremap jk <Esc>
+set noerrorbells
+set novisualbell                            " no annoying sound on errors
+set t_vb=
+set tm=500
+
+"=====================================================
+"" General key settings
+"=====================================================
+let mapleader=","                           " more friendly than '\'
+nmap <leader>w :w!<cr>                      " fast saving 
+nmap <F5> :call Run()<cr>                   " run current file 
 
 "=====================================================
 "" Tabs / Buffers settings
@@ -104,14 +116,26 @@ inoremap jk <Esc>
 tab sball
 set switchbuf=useopen
 set laststatus=2
+nmap <F3> :BufExplorer<CR>
 nmap <F9> :bprev<CR>
 nmap <F10> :bnext<CR>
 nmap <silent> <leader>q :SyntasticCheck # <CR> :bp <BAR> bd #<CR>
+nmap <leader>bd :Bclose<cr>:tabclose<cr>gT
+nmap <leader>ba :bufdo bd<cr>
+nmap <leader>l  :bnext<cr>
+nmap <leader>h  :bprevious<cr>
 
+
+"=====================================================
 "" Search settings
 "=====================================================
 set incsearch	                            " incremental search
 set hlsearch	                            " highlight search results
+set ignorecase                              " Ignore case when searching
+set smartcase                               " When searching try to be smart about cases
+" Search the selected text in viusal mode
+vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR> 
+nmap <silent> <leader><cr> :noh<cr>          " Disable highlight when <leader><cr> is pressed 
 
 "=====================================================
 "" AirLine settings
@@ -133,9 +157,9 @@ autocmd BufWinLeave *.py :TagbarClose
 "" NERDTree settings
 "=====================================================
 let NERDTreeIgnore=['\.pyc$', '\.pyo$', '__pycache__$']     " Ignore files in NERDTree
-let NERDTreeWinSize=40
+let NERDTreeWinSize=35
 autocmd VimEnter * if !argc() | NERDTree | endif  " Load NERDTree only if vim is run without arguments
-nmap " :NERDTreeToggle<CR>
+nmap <F2> :NERDTreeToggle<CR>
 
 "=====================================================
 "" SnipMate settings
@@ -238,3 +262,54 @@ let g:ycm_confirm_extra_conf=0
 
 nmap <leader>g :YcmCompleter GoTo<CR>
 nmap <leader>d :YcmCompleter GoToDefinition<CR>
+
+"=====================================================
+"" Helper functions 
+"=====================================================
+
+" Don't close window, when deleting a buffer
+command! Bclose call <SID>BufcloseCloseIt()
+function! <SID>BufcloseCloseIt()
+    let l:currentBufNum = bufnr("%")
+    let l:alternateBufNum = bufnr("#")
+
+    if buflisted(l:alternateBufNum)
+        buffer #
+    else
+        bnext
+    endif
+
+    if bufnr("%") == l:currentBufNum
+        new
+    endif
+
+    if buflisted(l:currentBufNum)
+        execute("bdelete! ".l:currentBufNum)
+    endif
+endfunction
+
+function! VisualSelection(direction, extra_filter) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", "\\/.*'$^~[]")
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'gv'
+        call CmdLine("Ack '" . l:pattern . "' " )
+    elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
+
+function! Run()
+    exec "w" 
+    if &filetype == 'python'
+        exec '!time python %'
+    elseif &filetype == 'sh'
+        :!time bash %
+    endif                                                                              
+endfunc 
