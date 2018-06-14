@@ -32,7 +32,7 @@ occurs just press enter and wait till all plugins are installed.
 After that, install ctags support:
 
 .. code-block:: bash
-   apt-get install exuberant-ctags
+  apt-get install exuberant-ctags
 
 Autocompletion
 --------------
