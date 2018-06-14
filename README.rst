@@ -31,6 +31,7 @@ occurs just press enter and wait till all plugins are installed. After that, ins
 
 .. code-block:: bash
   apt-get install exuberant-ctags
+ 
 
 Autocompletion
 --------------
