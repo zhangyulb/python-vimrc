@@ -60,15 +60,19 @@ bindings, but there are some custom key bindings as well:
 .. code::
 
     # Common key bindings:
+    
+    let mapleader=","                 # more friendly than '\'
 
-    inoremap jj     # Esc alternative
-    inoremap jk     # Esc alternative
+    nmap <F2> :NERDTreeToggle<CR>     # Toggle nerd tree
+    
+    nmap <F3> :BufExplorer<CR>        # Toggle buffer explorer
+    
+    nmap <F5> :call Run()<CR>         # Run current file      
 
-    nmap <F9>       # Jump to the previous buffer
-    nmap <F10>      # Jump to the next buffer
-
-    nmap <leader>q  # Delete buffer
-    nmap "          # Toggle NERDTree buffer 
+    nmap <leader>bd :Bclose<cr>:tabclose<cr>gT  # delete current buffer
+    nmap <leader>ba :bufdo bd<cr>               # delete all buffers
+    nmap <leader>l  :bnext<cr>                  # to next buffer
+    nmap <leader>h  :bprevious<cr>              # to previous buffer
 
     # Python mode key bindings:
 
