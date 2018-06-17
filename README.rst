@@ -68,7 +68,7 @@ bindings, but there are some custom key bindings as well:
     
     nmap <F3> :BufExplorer<CR>        # Toggle buffer explorer
     
-    nmap <F5> :call Run()<CR>         # Run current file      
+    nmap <F5> :ConqueTerm bashCR>     # Run bash in vim      
 
     nmap <leader>bd :Bclose<cr>:tabclose<cr>gT  # delete current buffer
     nmap <leader>ba :bufdo bd<cr>               # delete all buffers
