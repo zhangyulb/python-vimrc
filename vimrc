@@ -108,7 +108,6 @@ set tm=500
 "=====================================================
 let mapleader=","                           " more friendly than '\'
 nmap <leader>w :w!<cr>                      " fast saving 
-nmap <F5> :call Run()<cr>                   " run current file 
 
 "=====================================================
 "" Tabs / Buffers settings
@@ -117,14 +116,19 @@ tab sball
 set switchbuf=useopen
 set laststatus=2
 nmap <F3> :BufExplorer<CR>
-nmap <F9> :bprev<CR>
-nmap <F10> :bnext<CR>
 nmap <silent> <leader>q :SyntasticCheck # <CR> :bp <BAR> bd #<CR>
 nmap <leader>bd :Bclose<cr>:tabclose<cr>gT
 nmap <leader>ba :bufdo bd<cr>
 nmap <leader>l  :bnext<cr>
 nmap <leader>h  :bprevious<cr>
 
+"=====================================================
+""  Window movement 
+"=====================================================
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
 
 "=====================================================
 "" Search settings
@@ -165,6 +169,13 @@ nmap <F2> :NERDTreeToggle<CR>
 "" SnipMate settings
 "=====================================================
 let g:snippets_dir='~/.vim/vim-snippets/snippets'
+
+
+"=====================================================
+"" ConqueTerm settings
+"=====================================================
+nmap <F5> :ConqueTerm bash<CR>
+let g:ConqueTerm_StartMessages = 0
 
 "=====================================================
 "" Riv.vim settings
@@ -238,8 +249,7 @@ let g:pymode_folding=0
 let g:pymode_indent=1
 
 " code running
-let g:pymode_run=1
-let g:pymode_run_bind='<F5>'
+let g:pymode_run=0
 
 " syntastic
 let g:syntastic_always_populate_loc_list=1
@@ -256,7 +266,9 @@ let g:syntastic_python_checkers=['flake8', 'pydocstyle', 'python']
 
 " YouCompleteMe
 set completeopt-=preview
-
+let g:ycm_filetype_whitelist = { 'cpp' : 1, 'python' : 1 }
+let g:ycm_filetype_blacklist = { 'vim' : 1, 'text' : 1 }
+let g:ycm_autoclose_preview_window_after_completion=1
 let g:ycm_global_ycm_extra_conf='~/.vim/ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf=0
 
@@ -304,12 +316,3 @@ function! VisualSelection(direction, extra_filter) range
     let @/ = l:pattern
     let @" = l:saved_reg
 endfunction
-
-function! Run()
-    exec "w" 
-    if &filetype == 'python'
-        exec '!time python %'
-    elseif &filetype == 'sh'
-        :!time bash %
-    endif                                                                              
-endfunc 
